@@ -1,0 +1,33 @@
+body {
+  font: Verdana, Sans-Serif;
+}
+
+h1 {
+  color: white;
+  display: block;
+  text-align: center;
+  background-color: blue;
+}
+
+.message {
+  background-color: yellow;
+  padding: 5px;
+  padding-left: 20px;
+}
+
+.toggle_signin {
+  text-align: right;
+  padding-right: 25px;
+}
+
+.add_btn {
+  width: 90px;
+  height: 30px;
+  background-color: blue;
+  color: white;
+  border-radius: 5px;
+}
+
+.flight_description {
+  font-size: 14px;
+}

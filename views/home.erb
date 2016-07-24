@@ -1,0 +1,46 @@
+
+<% if session[:username] %>
+  <form class="toggle_signin" method="post" action ="/signout">
+    <p> You are currently signed in as <%= session[:username] %> </p>
+    <button type="submit" >Sign Out</button>
+  </form>
+<% else %>
+
+  <form class="toggle_signin" action="signin" method="post">
+    Please sign in to access personalized features.
+    <input type="text" name="username">
+    <input type= "password" name="password">
+    <button type="submit">Sign In</button>
+  </form>
+<% end %>
+
+<form method="get" action="/new">  
+    <button class="add_btn" type="submit">Add Flight</button>
+</form>
+
+<% if @flights %>
+  <h2>All Flights<h2>
+  <% @flights.each do |flight| %>
+    <h4>Flight Description: <%= flight[0] %></h4>
+    <p class='flight_description'>
+      Airline: <%= flight[1][:airline] %> <br>
+      Flight Number: <%= flight[1][:flightnum] %><br>
+      <% unless flight[1][:departure] == '' %>
+        City of Departure: <%= flight[1][:departure] %> <br>
+      <% end %>
+      <% unless flight[1][:arrival] == '' %>
+        City of Arrival <%= flight[1][:arrival] %> <br>
+      <% end %>
+      Date: <%= flight[1][:date] %><br>
+      Time: <%= flight[1][:time] %>
+      </p>
+    <form method="post" action="/delete/<%= flight[0] %>">
+      <button class="delete_btn" type="submit">Delete Flight</button>
+    </form>
+  <% end %>
+
+<% elsif session[:username] %>
+    <p>There are currently no flights to display.</p>
+<% end %>
+
+

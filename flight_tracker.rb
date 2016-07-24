@@ -1,12 +1,13 @@
-require 'sinatra'
-require 'sinatra/reloader' if development?
-require 'tilt/erubis'
-require 'bcrypt'
-require 'yaml'
-require 'pry'
+require "sinatra"
+require "sinatra/reloader"
+require "tilt/erubis"
+require "redcarpet"
+require "yaml"
+require "bcrypt"
 
 configure do
   enable :sessions
+  set :session_secret, 'super secret'
 end
 
 def require_signed_in_user
@@ -36,24 +37,22 @@ def correct_credentials?(username, password)
   end
 end
 
-def load_flights
-  flights_path = if ENV["RACK-ENV"] == "test"
+def flights_path
+  if ENV["RACK-ENV"] == "test"
     File.expand_path("../test/flights.yml", __FILE__)
   else
     File.expand_path("../flights.yml", __FILE__)
   end
-  YAML.load_file(flights_path)
 end
 
-def next_index
-  flights = load_flights
-  load_flights.count
+def load_flights
+  YAML.load_file(flights_path)
 end
 
 def add_flight(nickname, flight_info)
   flights = load_flights
   flights[nickname] = flight_info
-  File.open("flights.yml", 'w') { |file| file.write flights.to_yaml }
+  File.open(flights_path, 'w') { |file| file.write flights.to_yaml }
   session[:message] = "Flight has been added successfully"
 end
 
@@ -75,13 +74,13 @@ end
 
 post "/signin" do
   username = params[:username]
-  password = params[:password]
 
-  if correct_credentials?(username, password)
+  if correct_credentials?(username, params[:password])
     session[:username] = username
     session[:message] = "Successfully signed in as #{username}."
     redirect "/"
   else
+    status 422
     session[:message] = "Invalid credentials."
     redirect "/"
   end
@@ -109,7 +108,8 @@ post "/addflight" do
   departure = params[:departure]
   arrival = params[:arrival]
 
-  new_flight = {:airline => airline, :flightnum => flightnum, :date => date, :time => time, :departure => departure, :arrival => arrival}
+  new_flight = {:airline => airline, :flightnum => flightnum, :date => date, 
+    :time => time, :departure => departure, :arrival => arrival}
   add_flight(nickname, new_flight)
 
   redirect "/"
@@ -122,16 +122,6 @@ post "/delete/:flightname" do
 
   redirect "/"
 end
-
-# Display any flights on home page by pulling from file.
-
-# Button that says "Add Flight"
-
-# Create form for inputing flight information. Store in a file.
-
-# --
-
-# Have test file draw data from its own folder.
 
 # --
  # Make sure all user input is cleaned and secure.

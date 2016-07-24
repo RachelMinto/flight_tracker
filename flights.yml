@@ -13,17 +13,3 @@ Last on Wednesday:
   :time: '15:25'
   :departure: Vancouver
   :arrival: Smithers
-Another Portland to Vancouver:
-  :airline: Air Canada
-  :flightnum: AC8124
-  :date: '2016-07-27'
-  :time: '15:25'
-  :departure: Portland
-  :arrival: Vancouver
-'1':
-  :airline: '1'
-  :flightnum: '1'
-  :date: '0001-01-01'
-  :time: '01:01'
-  :departure: '1'
-  :arrival: '1'
